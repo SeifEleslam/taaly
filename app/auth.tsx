@@ -1,10 +1,9 @@
 "use client";
-import React, { useEffect, useState } from "react";
-import { auth, onAuthChanged } from "@/libs/firebase/auth";
-import { useAppSelector, useAppDispatch } from "@/libs/store/hooks";
+import React, { useEffect } from "react";
+import { auth } from "@/libs/firebase/auth";
+import { useAppDispatch } from "@/libs/store/hooks";
 import { set } from "@/libs/store/slices/user";
 import { useAuthState } from "react-firebase-hooks/auth";
-import { User } from "firebase/auth";
 import { useRouter } from "next/navigation";
 import { usePathname } from "next/navigation";
 import Loader from "./components/loader";
@@ -22,7 +21,13 @@ export default function AuthLayout({
 
   useEffect(() => {
     console.log(user, pathname);
-    dispatch(set(user));
+    dispatch(
+      set({
+        email: user?.email,
+        name: user?.displayName,
+        image: user?.photoURL,
+      })
+    );
     if (user && (pathname.includes("login") || pathname === "/"))
       router.replace("/dashboard");
     else if (!user && !pathname.includes("login")) router.replace("/login");

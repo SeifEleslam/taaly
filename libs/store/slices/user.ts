@@ -4,14 +4,14 @@ import { RootState } from "../store";
 import { IdTokenResult, User } from "firebase/auth";
 
 // Define a type for the slice state
-
+export interface StoredUser {
+  name: string | null | undefined;
+  email: string | null | undefined;
+  image: string | null | undefined;
+}
 // Define the initial state using that type
 const initialState: {
-  data: {
-    name: string | null;
-    email: string | null;
-    image: string | null;
-  } | null;
+  data: StoredUser | null | undefined;
 } = {
   data: null,
 };
@@ -20,14 +20,8 @@ export const userSlice = createSlice({
   name: "user",
   initialState,
   reducers: {
-    set: (state, action: PayloadAction<User | null | undefined>) => {
-      state.data = action.payload
-        ? {
-            email: action.payload.email,
-            name: action.payload.displayName,
-            image: action.payload.photoURL,
-          }
-        : null;
+    set: (state, action: PayloadAction<StoredUser | null | undefined>) => {
+      state.data = action.payload;
     },
   },
 });
